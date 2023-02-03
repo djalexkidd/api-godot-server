@@ -1,0 +1,79 @@
+/* Police d'écriture */
+@font-face {
+  font-family: 'Lato-Regular';
+  src : url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Lato-Bold';
+  src: url('../fonts/Lato/Lato-Bold.ttf') format('truetype');
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
+}
+
+table {
+	border :1px solid #ccc;
+	border-collapse: collapse;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+table tr {
+  background: #f8f8f8;
+  border: 1px solid #ccc;
+  padding: .35em;
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+  font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  font-family: 'Lato-Bold', Arial, Helvetica, sans-serif;
+}
+
+/* Media Queries*/
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+  table caption {
+    font-size: 1.3em;
+  }
+  table thead {
+    display: none;
+  }
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  table td:before {
+  	content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* Media Queries*/
