@@ -61,8 +61,8 @@ app.get("/api/:name", async (req, res) => {
 })
 
 // Enregistre un score dans la BDD
-app.post("/sendscore", (req, res, next) => {
-    knex("galakanoid").insert({
+app.post("/sendscore/:name", (req, res, next) => {
+    knex(req.params.name).insert({
         name: req.body.name,
         score: req.body.score,
     })
