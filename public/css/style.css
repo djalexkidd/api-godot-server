@@ -9,7 +9,7 @@
   src: url('../fonts/Lato/Lato-Bold.ttf') format('truetype');
 }
 
-h1 {
+h1, h2 {
     text-align: center;
     font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
 }

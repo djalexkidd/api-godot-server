@@ -31,8 +31,8 @@ const knex = require('knex')({
 ///////////////
 // Fonctions //
 ///////////////
-function getLeaderboard() {
-    const result = knex.select().table("leaderboard").orderBy("score", "desc");
+function getLeaderboard(table) {
+    const result = knex.select().table(table).orderBy("score", "desc");
 
     return result.then(function(rows){
         return rows;
@@ -44,21 +44,25 @@ function getLeaderboard() {
 ////////////
 
 // Page des classements
-app.get("/", async (req, res) => {
-    res.render("leaderboard.ejs", {
-        scores: await getLeaderboard()
-    });
+app.get("/web/:name", async (req, res) => {
+    try {
+        res.render("leaderboard.ejs", {
+            scores: await getLeaderboard(req.params.name)
+        });
+    } catch {
+        res.render("error.ejs");
+    }
 });
 
 // Envoie le classement en JSON
-app.get("/api", async (req, res) => {
+app.get("/api/:name", async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify(await getLeaderboard()));
+    res.end(JSON.stringify(await getLeaderboard(req.params.name)));
 })
 
 // Enregistre un score dans la BDD
 app.post("/sendscore", (req, res, next) => {
-    knex("leaderboard").insert({
+    knex("galakanoid").insert({
         name: req.body.name,
         score: req.body.score,
     })
