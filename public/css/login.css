@@ -27,6 +27,7 @@ form {
     flex-direction: column;
     justify-content: center;
     font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
+    padding: 10px 20px;
 }
 
 .container {
