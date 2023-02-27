@@ -1,0 +1,42 @@
+/* Police d'écriture */
+@font-face {
+    font-family: 'Lato-Regular';
+    src : url('../fonts/Lato/Lato-Regular.ttf') format('truetype');
+}
+  
+@font-face {
+    font-family: 'Lato-Bold';
+    src: url('../fonts/Lato/Lato-Bold.ttf') format('truetype');
+}
+
+h1, h2 {
+    text-align: center;
+    font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-image: url("../img/background.png");
+}
+
+form {
+    width: 300px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'Lato-Regular', Arial, Helvetica, sans-serif;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(10px);
+}
+
+input, button {
+    height: 40px;
+}
