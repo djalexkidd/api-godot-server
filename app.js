@@ -245,6 +245,15 @@ app.post("/admin/create", ensureAuthenticated, async (req, res, next) => {
     console.log("Created game " + gameId);
 });
 
+// Réinitialisation des classements
+app.get("/admin/reset/:name", ensureAuthenticated, async (req, res) => {
+    await knex(req.params.name).del();
+
+    res.redirect("/admin");
+
+    console.log("Reset leaderboard " + req.params.name);
+});
+
 ///////////////////
 // Autres routes //
 ///////////////////
