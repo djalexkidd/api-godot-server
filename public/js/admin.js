@@ -3,5 +3,5 @@ function deleteLeaderboard(name) {
 
     fetch('/admin/delete/' + name,  {
       method: 'DELETE'
-    });
+    }).then(() => location.reload());
 };

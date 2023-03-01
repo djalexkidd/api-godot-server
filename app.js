@@ -119,7 +119,7 @@ app.post("/sendscore", async (req, res, next) => {
         score: req.body.score,
     })
     .then(() => {
-        res.send("OK");
+        res.sendStatus(200);
     })
     .catch(error => next(error));
 
@@ -196,6 +196,7 @@ app.get('/admin', ensureAuthenticated, async function(req, res) {
     });
 });
 
+// Suppression d'un jeu
 app.delete('/admin/delete/:name', ensureAuthenticated, async function(req, res) {
     if (req.params.name == "users" || req.params.name == "games") {
         return;
@@ -206,6 +207,23 @@ app.delete('/admin/delete/:name', ensureAuthenticated, async function(req, res) 
     await knex.schema.dropTable(req.params.name).then(() => res.sendStatus(200)).catch(() => res.sendStatus(404));
 
     console.log("Deleted table " + req.params.name);
+});
+
+// Création d'un jeu
+app.post("/admin/create", ensureAuthenticated, (req, res, next) => {
+    knex("games").insert({
+        id: 0,
+        name: req.body.name,
+        display_name: req.body.displayname,
+        author: req.body.author,
+        apikey: generateApiKey(64),
+    })
+    .then(() => {
+        res.sendStatus(200);
+    })
+    .catch(error => next(error));
+
+    console.log("Created game " + req.body.game);
 });
 
 ///////////////////
