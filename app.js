@@ -63,6 +63,15 @@ function apiKeyToGameName(apiKey) {
     })
 };
 
+// Pour récupérer le nom complet d'un jeu à partir de son nom court
+function getGameName(query) {
+    const result = knex.select().table("games").where({ name: query });
+
+    return result.then(function(rows){
+        return rows[0].display_name;
+    })
+};
+
 // Middleware pour vérifier si l'utilisateur est connecté
 function ensureAuthenticated(req, res, next) {
     const token = req.cookies.token
@@ -97,7 +106,8 @@ function generateApiKey(length) {
 app.get("/web/:name", async (req, res) => {
     try {
         res.render("leaderboard.ejs", {
-            scores: await getLeaderboard(req.params.name)
+            scores: await getLeaderboard(req.params.name),
+            gamename: await getGameName(req.params.name)
         });
     } catch {
         res.status(404);
@@ -209,21 +219,30 @@ app.delete('/admin/delete/:name', ensureAuthenticated, async function(req, res) 
     console.log("Deleted table " + req.params.name);
 });
 
+// Page pour créer un jeu
+app.get('/admin/create', ensureAuthenticated, function(req, res) {
+    res.render("create.ejs");
+});
+
 // Création d'un jeu
-app.post("/admin/create", ensureAuthenticated, (req, res, next) => {
+app.post("/admin/create", ensureAuthenticated, async (req, res, next) => {
+    const gameId = req.body.displayname.replace(/[^a-zA-Z ]/g, "").replace(/\s+/g, '-').toLowerCase();
+
     knex("games").insert({
         id: 0,
-        name: req.body.name,
+        name: gameId,
         display_name: req.body.displayname,
         author: req.body.author,
         apikey: generateApiKey(64),
     })
     .then(() => {
-        res.sendStatus(200);
+        res.redirect("/admin");
     })
     .catch(error => next(error));
 
-    console.log("Created game " + req.body.game);
+    await knex.schema.createTableLike(gameId, "template");
+
+    console.log("Created game " + gameId);
 });
 
 ///////////////////
