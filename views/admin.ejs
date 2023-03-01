@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+    <title>Panneau d'administration</title>
+</head>
+<body>
+    <h1>Panneau d'administration</h1>
+
+    <a href="admin/addgame/">Ajouter un jeu</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</td>
+                <th>Indentifiant</td>
+                <th>Auteur</td>
+                <th>Clé d'API</td>
+                <th>Actions</td>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i = 0; i < games.length; i++) { %>
+            <tr>
+                <td data-label="Nom"><%= games[i].display_name %></td>
+                <td data-label="ID"><%= games[i].name %></td>
+                <td data-label="Auteur"><%= games[i].author %></td>
+                <td data-label="Clé d'API"><%= games[i].apikey %></td>
+                <td data-label="Actions"><a title="Éditer" href="admin/edit/<%= games[i].id %>">✏️</a><a title="Réinitialiser" href="admin/reset/<%= games[i].id %>" onclick="return confirm('⚠️ Voulez-vous vraiment réinitialiser le classement de ce jeu ?')">🔄</a><a title="Supprimer" href="admin/delete/<%= games[i].id %>" onclick="return confirm('⚠️ Voulez-vous vraiment supprimer ce jeu ?')">❌</a></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -36,6 +36,15 @@ const knex = require('knex')({
 // Fonctions //
 ///////////////
 
+// Pour obtenir la liste des jeux
+function getGames() {
+    const result = knex.select().table("games").orderBy("display_name", "asc");
+
+    return result.then(function(rows){
+        return rows;
+    })
+};
+
 // Pour obtenir les classements pour un jeu
 function getLeaderboard(table) {
     const result = knex.select().table(table).orderBy("score", "desc");
@@ -66,6 +75,19 @@ function ensureAuthenticated(req, res, next) {
        }
     })
 };
+
+// Génère une clé d'API aléatoire
+function generateApiKey(length) {
+    let result = '';
+    const characters = 'abcdef0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 
 ///////////////////////
 // Routes WWW et API //
@@ -162,7 +184,9 @@ app.post("/login", (req, res, next) => {
 
 // Page d'administration
 app.get('/admin', ensureAuthenticated, async function(req, res) {
-    res.send("Auth OK");
+    res.render("admin.ejs", {
+        games: await getGames()
+    });
 });
 
 /////////////////////////////////////////////
