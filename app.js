@@ -100,6 +100,7 @@ app.get("/web/:name", async (req, res) => {
             scores: await getLeaderboard(req.params.name)
         });
     } catch {
+        res.status(404);
         res.render("error.ejs");
     }
 });
@@ -163,6 +164,7 @@ app.post("/login", (req, res, next) => {
     })
 });
 
+// Route pour l'inscription (désactivé)
 // app.post("/register", (request, response, next) => {
 //     bcrypt.hash(request.body.password, 10)
 //     .then(hashedPassword => {
@@ -187,6 +189,28 @@ app.get('/admin', ensureAuthenticated, async function(req, res) {
     res.render("admin.ejs", {
         games: await getGames()
     });
+});
+
+app.delete('/admin/delete/:name', ensureAuthenticated, async function(req, res) {
+    if (req.params.name == "users" || req.params.name == "games") {
+        return;
+    };
+
+    await knex("games").where({ name: req.params.name }).del();
+
+    await knex.schema.dropTable(req.params.name).then(() => res.sendStatus(200)).catch(() => res.sendStatus(404));
+
+    console.log("Deleted table " + req.params.name);
+});
+
+///////////////////
+// Autres routes //
+///////////////////
+
+// Page erreur 404
+app.get('*', (req, res) => {
+    res.status(404);
+    res.render('error.ejs');
 });
 
 /////////////////////////////////////////////
