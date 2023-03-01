@@ -35,11 +35,22 @@ const knex = require('knex')({
 ///////////////
 // Fonctions //
 ///////////////
+
+// Pour obtenir les classements pour un jeu
 function getLeaderboard(table) {
     const result = knex.select().table(table).orderBy("score", "desc");
 
     return result.then(function(rows){
         return rows;
+    })
+};
+
+// Pour obtenir le nom du jeu à partir d'une clé d'API
+function apiKeyToGameName(apiKey) {
+    const result = knex.select().table("games").where({ apikey: apiKey });
+
+    return result.then(function(rows){
+        return rows[0].name;
     })
 };
 
@@ -78,8 +89,9 @@ app.get("/api/:name", async (req, res) => {
 });
 
 // Enregistre un score dans la BDD
-app.post("/sendscore/:name", (req, res, next) => {
-    knex(req.params.name).insert({
+app.post("/sendscore", async (req, res, next) => {
+    const gameName = await apiKeyToGameName(req.query.apikey);
+    knex(gameName).insert({
         name: req.body.name,
         score: req.body.score,
     })
@@ -87,6 +99,8 @@ app.post("/sendscore/:name", (req, res, next) => {
         res.send("OK");
     })
     .catch(error => next(error));
+
+    console.log("Registered score of player " + req.body.name + " who has " + req.body.score + " in table " + gameName);
 });
 
 /////////////////////////
