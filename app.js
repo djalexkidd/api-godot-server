@@ -164,6 +164,11 @@ app.post("/login", (req, res, next) => {
     })
 });
 
+app.get("/logout", async (req, res) => {
+    res.clearCookie("token");
+    res.redirect('/login');
+});
+
 // Route pour l'inscription (désactivé)
 // app.post("/register", (request, response, next) => {
 //     bcrypt.hash(request.body.password, 10)
