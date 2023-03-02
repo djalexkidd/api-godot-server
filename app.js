@@ -63,12 +63,12 @@ function apiKeyToGameName(apiKey) {
     })
 };
 
-// Pour récupérer le nom complet d'un jeu à partir de son nom court
-function getGameName(query) {
+// Pour obtenir les informations sur un jeu
+function getGameInfo(query) {
     const result = knex.select().table("games").where({ name: query });
 
     return result.then(function(rows){
-        return rows[0].display_name;
+        return rows[0];
     })
 };
 
@@ -107,7 +107,7 @@ app.get("/web/:name", async (req, res) => {
     try {
         res.render("leaderboard.ejs", {
             scores: await getLeaderboard(req.params.name),
-            gamename: await getGameName(req.params.name)
+            gamename: await getGameInfo(req.params.name)
         });
     } catch {
         res.status(404);
@@ -243,6 +243,29 @@ app.post("/admin/create", ensureAuthenticated, async (req, res, next) => {
     await knex.schema.createTableLike(gameId, "template");
 
     console.log("Created game " + gameId);
+});
+
+// Page pour éditer un jeu
+app.get('/admin/edit/:name', ensureAuthenticated, async function(req, res) {
+    res.render("edit.ejs", {
+        gameinfo: await getGameInfo(req.params.name)
+    });
+});
+
+// Éditer un jeu
+app.post("/admin/edit/:name", ensureAuthenticated, async (req, res, next) => {
+    knex('games')
+    .where({ name: req.params.name })
+    .update({
+        display_name: req.body.displayname,
+        author: req.body.author
+    })
+    .then(() => {
+        res.redirect("/admin");
+    })
+    .catch(error => next(error));
+
+    console.log("Edited game " + req.params.name);
 });
 
 // Réinitialisation des classements

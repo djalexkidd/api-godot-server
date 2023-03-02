@@ -32,7 +32,7 @@
                 <td data-label="ID"><%= games[i].name %></td>
                 <td data-label="Auteur"><%= games[i].author %></td>
                 <td data-label="Clé d'API"><%= games[i].apikey %></td>
-                <td data-label="Actions"><a title="Voir" href="web/<%= games[i].name %>">📜</a><a title="Éditer" href="admin/edit/<%= games[i].id %>">✏️</a><a title="Réinitialiser" href="admin/reset/<%= games[i].name %>" onclick="return confirm('⚠️ Voulez-vous vraiment réinitialiser le classement de ce jeu ?')">🔄</a><a title="Supprimer" href="#" onclick="return deleteLeaderboard('<%= games[i].name %>')">❌</a></td>
+                <td data-label="Actions"><a title="Voir" href="web/<%= games[i].name %>">📜</a><a title="Éditer" href="admin/edit/<%= games[i].name %>">✏️</a><a title="Réinitialiser" href="admin/reset/<%= games[i].name %>" onclick="return confirm('⚠️ Voulez-vous vraiment réinitialiser le classement de ce jeu ?')">🔄</a><a title="Supprimer" href="#" onclick="return deleteLeaderboard('<%= games[i].name %>')">❌</a></td>
             </tr>
             <% } %>
         </tbody>
